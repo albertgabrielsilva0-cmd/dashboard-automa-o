@@ -1,0 +1,1385 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Automações Inteligentes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+<style>
+:root {
+  --bg: #07091a;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --blue: #4f8ef7;
+  --purple: #8b5cf6;
+  --green: #10d078;
+  --amber: #f59e0b;
+  --fg: #e8ecf6;
+  --fg2: #8b97c0;
+  --fg3: #4a5278;
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--fg);overflow:hidden;}
+
+/* ---- SLIDE SYSTEM ---- */
+#deck{position:fixed;inset:0;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(24px,5vw,64px) clamp(20px,6vw,80px);opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s ease;transform:translateY(20px);}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.out{opacity:0;transform:translateY(-20px);}
+
+/* ---- BACKGROUND VARIANTS ---- */
+.bg-cover{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(79,142,247,0.18) 0%,transparent 70%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(139,92,246,0.14) 0%,transparent 60%),var(--bg);}
+.bg-s1{background:radial-gradient(ellipse 100% 80% at 20% 30%,rgba(16,208,120,0.08) 0%,transparent 60%),radial-gradient(ellipse 80% 70% at 80% 70%,rgba(79,142,247,0.14) 0%,transparent 60%),var(--bg);}
+.bg-s2{background:radial-gradient(ellipse 80% 60% at 70% 20%,rgba(245,158,11,0.1) 0%,transparent 60%),var(--bg);}
+.bg-s3{background:radial-gradient(ellipse 80% 60% at 30% 80%,rgba(139,92,246,0.14) 0%,transparent 60%),var(--bg);}
+.bg-s4{background:radial-gradient(ellipse 100% 80% at 50% 50%,rgba(16,208,120,0.12) 0%,transparent 70%),var(--bg);}
+
+/* ---- GRID HELPERS ---- */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,40px);width:100%;align-items:center;}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,28px);width:100%;}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.5vw,24px);width:100%;}
+.col-left{display:flex;flex-direction:column;gap:16px;}
+.col-right{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.w100{width:100%;max-width:1100px;}
+
+/* ---- TYPOGRAPHY ---- */
+.overline{font-size:clamp(10px,1vw,13px);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+.overline.green{color:var(--green);}
+.overline.purple{color:var(--purple);}
+.overline.amber{color:var(--amber);}
+h1{font-size:clamp(32px,5.5vw,72px);font-weight:900;line-height:1.08;text-wrap:balance;}
+h2{font-size:clamp(22px,3.5vw,46px);font-weight:800;line-height:1.15;text-wrap:balance;}
+h3{font-size:clamp(16px,2vw,26px);font-weight:700;line-height:1.3;}
+.lead{font-size:clamp(14px,1.5vw,20px);color:var(--fg2);line-height:1.6;text-wrap:balance;}
+.big-num{font-size:clamp(40px,7vw,96px);font-weight:900;line-height:1;font-variant-numeric:tabular-nums;}
+.caption{font-size:clamp(10px,.9vw,13px);color:var(--fg3);}
+.grad-blue{background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad-green{background:linear-gradient(135deg,#10d078,#4f8ef7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ---- CARD ---- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(14px,2vw,28px);}
+.card-glow-blue{border-color:rgba(79,142,247,.3);box-shadow:0 0 40px rgba(79,142,247,.08);}
+.card-glow-green{border-color:rgba(16,208,120,.3);box-shadow:0 0 40px rgba(16,208,120,.08);}
+.card-glow-purple{border-color:rgba(139,92,246,.3);box-shadow:0 0 40px rgba(139,92,246,.08);}
+
+/* ---- SERVICE TAG ---- */
+.svc-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:30px;font-size:12px;font-weight:700;letter-spacing:.04em;}
+.tag-blue{background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);color:var(--blue);}
+.tag-green{background:rgba(16,208,120,.15);border:1px solid rgba(16,208,120,.3);color:var(--green);}
+.tag-purple{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--purple);}
+.tag-amber{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:var(--amber);}
+
+/* ---- ICON BOX ---- */
+.icon-box{width:clamp(36px,4vw,52px);height:clamp(36px,4vw,52px);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.icon-blue{background:rgba(79,142,247,.18);color:var(--blue);}
+.icon-green{background:rgba(16,208,120,.18);color:var(--green);}
+.icon-purple{background:rgba(139,92,246,.18);color:var(--purple);}
+.icon-amber{background:rgba(245,158,11,.18);color:var(--amber);}
+.icon-red{background:rgba(239,68,68,.18);color:#ef4444;}
+
+/* ---- PAIN ITEM ---- */
+.pain-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:12px;}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;background:rgba(16,208,120,.06);border:1px solid rgba(16,208,120,.12);border-radius:12px;}
+
+/* ---- PROGRESS BAR ---- */
+.pbar-wrap{width:100%;background:rgba(255,255,255,.07);border-radius:6px;height:8px;overflow:hidden;}
+.pbar{height:100%;border-radius:6px;transition:width .6s ease;}
+.pbar-blue{background:linear-gradient(90deg,var(--blue),#7c5ff4);}
+.pbar-green{background:linear-gradient(90deg,var(--green),var(--blue));}
+.pbar-amber{background:var(--amber);}
+
+/* ---- COMPARISON ---- */
+.cmp-row{display:flex;flex-direction:column;gap:6px;padding:14px 18px;border-radius:12px;}
+.cmp-manual{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);}
+.cmp-auto{background:rgba(16,208,120,.07);border:1px solid rgba(16,208,120,.15);}
+.cmp-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.cmp-label.red{color:#ef4444;}
+.cmp-label.green{color:var(--green);}
+.cmp-value{font-size:clamp(22px,3vw,38px);font-weight:900;font-variant-numeric:tabular-nums;}
+.cmp-desc{font-size:12px;color:var(--fg2);}
+
+/* ---- WHATSAPP PHONE ---- */
+.phone-wrap{position:relative;width:clamp(200px,22vw,290px);flex-shrink:0;}
+.phone-frame{background:#1a1a2e;border:2px solid rgba(255,255,255,.12);border-radius:36px;overflow:hidden;padding:12px 8px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.phone-top{background:#111827;height:28px;border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;gap:8px;}
+.chat-header{background:#111827;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+.chat-name{font-size:12px;font-weight:600;color:#e8ecf6;}
+.chat-status{font-size:10px;color:var(--green);}
+.chat-body{background:#0d1117;padding:10px 8px;min-height:280px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;}
+.msg{max-width:85%;border-radius:12px;padding:8px 10px;font-size:11px;line-height:1.5;}
+.msg-in{background:#1e293b;color:#e8ecf6;border-bottom-left-radius:4px;align-self:flex-start;}
+.msg-out{background:#075e54;color:#fff;border-bottom-right-radius:4px;align-self:flex-end;}
+.msg-time{font-size:9px;opacity:.6;margin-top:2px;text-align:right;}
+.msg-audio{display:flex;align-items:center;gap:6px;background:#1e293b;border-radius:12px;padding:8px 10px;align-self:flex-start;}
+.msg-img{width:120px;height:80px;border-radius:8px;background:linear-gradient(135deg,#374151,#1f2937);display:flex;align-items:center;justify-content:center;font-size:20px;align-self:flex-start;}
+.chat-input{background:#111827;padding:8px;display:flex;align-items:center;gap:6px;}
+.chat-input-box{flex:1;background:#1e293b;border-radius:20px;padding:6px 12px;font-size:10px;color:#e8ecf6;}
+
+/* ---- FLOW STEP ---- */
+.flow-wrap{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;}
+.flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:80px;}
+.flow-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.flow-label{font-size:10px;color:var(--fg2);text-align:center;max-width:72px;line-height:1.3;}
+.flow-arrow{color:var(--fg3);font-size:18px;padding:0 2px;margin-top:-20px;}
+
+/* ---- DASHBOARD MINI ---- */
+.mini-dash{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;}
+.mini-kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;}
+.mini-kpi-val{font-size:clamp(16px,2vw,24px);font-weight:800;line-height:1;}
+.mini-kpi-lbl{font-size:9px;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+/* ---- TABLE ---- */
+.cmp-table{width:100%;border-collapse:collapse;font-size:clamp(10px,.9vw,13px);}
+.cmp-table th{background:rgba(255,255,255,.06);color:var(--fg2);font-weight:600;font-size:clamp(9px,.8vw,11px);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;text-align:left;white-space:nowrap;}
+.cmp-table td{padding:12px 14px;border-top:1px solid rgba(255,255,255,.05);color:var(--fg2);vertical-align:top;}
+.cmp-table td:first-child{font-weight:600;color:var(--fg);}
+.cmp-table tr:hover td{background:rgba(255,255,255,.03);}
+
+/* ---- QUOTE SLIDE ---- */
+.quote-slide{text-align:center;max-width:900px;}
+.quote-mark{font-size:clamp(60px,10vw,120px);line-height:.7;opacity:.15;font-family:Georgia,serif;color:var(--blue);}
+.quote-text{font-size:clamp(20px,3.5vw,46px);font-weight:800;line-height:1.2;text-wrap:balance;}
+.quote-text span{color:var(--blue);}
+
+/* ---- BADGE GRID ---- */
+.badge-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.badge{padding:7px 14px;border-radius:30px;font-size:11px;font-weight:600;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--fg2);}
+
+/* ---- NAV ---- */
+#nav{position:fixed;bottom:clamp(14px,2.5vh,28px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:100;background:rgba(7,9,26,.8);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:50px;padding:8px 20px;}
+.nav-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--fg2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.nav-btn:hover{background:rgba(79,142,247,.2);border-color:var(--blue);color:var(--blue);}
+.nav-btn:disabled{opacity:.3;cursor:default;}
+#dot-wrap{display:flex;gap:5px;align-items:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s;}
+.dot.active{width:18px;border-radius:3px;background:var(--blue);}
+#slide-counter{font-size:11px;color:var(--fg3);font-variant-numeric:tabular-nums;min-width:40px;text-align:center;}
+
+/* ---- PROGRESS LINE ---- */
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .4s ease;z-index:200;}
+
+/* ---- SEGMENTS ROW ---- */
+.segments{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.seg{padding:4px 10px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--fg2);}
+
+/* ---- STAT CIRCLE ---- */
+.stat-circle{width:clamp(100px,12vw,160px);height:clamp(100px,12vw,160px);border-radius:50%;border:3px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex-shrink:0;}
+
+/* ---- CLOSING ---- */
+.closing-contact{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 32px;display:flex;flex-direction:column;gap:14px;width:100%;max-width:500px;}
+.contact-row{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;}
+.contact-placeholder{color:var(--fg3);font-style:italic;font-size:13px;}
+
+/* ---- RESP ---- */
+@media(max-width:700px){
+  .cols2{grid-template-columns:1fr;}
+  .cols3{grid-template-columns:1fr 1fr;}
+  .cols4{grid-template-columns:1fr 1fr;}
+  .phone-wrap{display:none;}
+  #nav{padding:6px 14px;gap:10px;}
+  .dot{display:none;}
+  .dot.active{display:block;}
+  .slide{overflow-y:auto;justify-content:flex-start;padding-bottom:90px;-webkit-overflow-scrolling:touch;}
+  .nav-btn{width:44px;height:44px;}
+  input[type=range]{height:36px;}
+}
+@media(max-width:420px){
+  .cols3{grid-template-columns:1fr;}
+}
+</style>
+
+<div id="progress"></div>
+
+<div id="deck">
+
+<!-- ============ SLIDE 1 — COVER ============ -->
+<div class="slide active bg-cover">
+  <div style="text-align:center;max-width:880px;">
+    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);border-radius:30px;padding:7px 18px;margin-bottom:28px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);"></div>
+      <span style="font-size:12px;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;">Soluções de Automação Empresarial</span>
+    </div>
+    <h1 style="margin-bottom:20px;">Automatize o repetitivo.<br><span class="grad-blue">Foque no que importa.</span></h1>
+    <p class="lead" style="max-width:600px;margin:0 auto 36px;">Economize horas por dia, reduza erros e ofereça um atendimento mais ágil — com tecnologia acessível para qualquer tipo de negócio.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px;">
+      <span class="svc-tag tag-blue">① Disparo de Mensagens</span>
+      <span class="svc-tag tag-green">② Controle de Inadimplência</span>
+      <span class="svc-tag tag-purple">③ Redução de No-Show</span>
+      <span class="svc-tag tag-amber" style="border-width:2px;">★ WhatsApp com IA</span>
+    </div>
+    <div class="segments">
+      <span class="seg">🐾 Pet Shop</span><span class="seg">🏥 Clínicas</span><span class="seg">✂️ Salões</span><span class="seg">🏋️ Academias</span><span class="seg">🛒 Lojas</span><span class="seg">⚙️ Prestadores de Serviço</span><span class="seg">🦷 Consultórios</span><span class="seg">💈 Barbearias</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 2 — O PROBLEMA ============ -->
+<div class="slide bg-s2">
+  <div class="w100" style="max-width:1000px;">
+    <div class="overline amber">O Cenário Atual</div>
+    <h2 style="margin-bottom:8px;">Quanto tempo sua equipe perde<br>em tarefas <span style="color:#ef4444;">repetitivas</span>?</h2>
+    <p class="lead" style="margin-bottom:28px;max-width:600px;">Para muitas empresas, horas do dia útil são consumidas com tarefas que poderiam ser automatizadas.</p>
+    <div class="cols4">
+      <div class="card" style="text-align:center;border-color:rgba(239,68,68,.2);">
+        <div style="font-size:30px;margin-bottom:10px;">📱</div>
+        <div class="big-num" style="font-size:clamp(28px,4vw,52px);color:#ef4444;">3–4h</div>
+        <div class="caption" style="margin-top:6px;">enviando mensagens manualmente para clientes</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(239,68,68,.2);">
+        <div style="font-size:30px;margin-bottom:10px;">📋</div>
+        <div class="big-num" style="font-size:clamp(28px,4vw,52px);color:#ef4444;">1h+</div>
+        <div class="caption" style="margin-top:6px;">conferindo planilhas de inadimplência todo dia</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(239,68,68,.2);">
+        <div style="font-size:30px;margin-bottom:10px;">📅</div>
+        <div class="big-num" style="font-size:clamp(28px,4vw,52px);color:#ef4444;">30–60min</div>
+        <div class="caption" style="margin-top:6px;">enviando lembretes de agendamento individualmente</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(239,68,68,.2);">
+        <div style="font-size:30px;margin-bottom:10px;">💬</div>
+        <div class="big-num" style="font-size:clamp(28px,4vw,52px);color:#ef4444;">4–6h</div>
+        <div class="caption" style="margin-top:6px;">respondendo perguntas repetitivas no WhatsApp</div>
+      </div>
+    </div>
+    <p class="caption" style="text-align:center;margin-top:16px;">* Cenários ilustrativos. O tempo real varia conforme o volume e o tipo de operação.</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 3 — AS 4 SOLUÇÕES ============ -->
+<div class="slide bg-cover">
+  <div class="w100" style="max-width:1000px;">
+    <div class="overline">A Solução</div>
+    <h2 style="margin-bottom:28px;text-align:center;">Quatro automações para transformar<br>a operação do seu negócio</h2>
+    <div class="cols4">
+      <div class="card card-glow-blue" style="text-align:center;padding:clamp(16px,2.5vw,32px) 20px;">
+        <div class="icon-box icon-blue" style="margin:0 auto 14px;width:52px;height:52px;border-radius:16px;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+        <div class="overline" style="margin-bottom:6px;">Serviço 1</div>
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:8px;">Disparo Automatizado</h3>
+        <p class="caption">Campanhas de mensagens para clientes sem trabalho manual repetitivo</p>
+      </div>
+      <div class="card card-glow-green" style="text-align:center;padding:clamp(16px,2.5vw,32px) 20px;">
+        <div class="icon-box icon-green" style="margin:0 auto 14px;width:52px;height:52px;border-radius:16px;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="overline green" style="margin-bottom:6px;">Serviço 2</div>
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:8px;">Controle de Inadimplência</h3>
+        <p class="caption">Cobranças automáticas nos momentos certos, sem esquecimentos</p>
+      </div>
+      <div class="card card-glow-purple" style="text-align:center;padding:clamp(16px,2.5vw,32px) 20px;">
+        <div class="icon-box icon-purple" style="margin:0 auto 14px;width:52px;height:52px;border-radius:16px;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="overline purple" style="margin-bottom:6px;">Serviço 3</div>
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:8px;">Redução de No-Show</h3>
+        <p class="caption">Lembretes automáticos antes dos compromissos e agendamentos</p>
+      </div>
+      <div class="card" style="text-align:center;padding:clamp(16px,2.5vw,32px) 20px;border-color:rgba(245,158,11,.4);box-shadow:0 0 50px rgba(245,158,11,.1);">
+        <div class="icon-box icon-amber" style="margin:0 auto 14px;width:52px;height:52px;border-radius:16px;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="overline amber" style="margin-bottom:6px;">★ Principal</div>
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:8px;">WhatsApp com IA</h3>
+        <p class="caption">Atendimento inteligente 24h que agenda, responde e conversa naturalmente</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 4 — SVC1 PROBLEMA ============ -->
+<div class="slide bg-s1">
+  <div class="cols2 w100" style="max-width:1000px;">
+    <div class="col-left">
+      <div class="svc-tag tag-blue">Serviço 1 — Disparo Automatizado</div>
+      <h2>Enviar mensagens<br>individualmente é<br><span style="color:#ef4444;">ineficiente.</span></h2>
+      <p class="lead">Para 100 contatos, o processo manual pode consumir de 100 a 200 minutos — mais de 3 horas do expediente.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+        <div class="pain-item">
+          <span>🔴</span>
+          <span style="font-size:13px;">Abrir o WhatsApp, localizar o contato e personalizar cada mensagem</span>
+        </div>
+        <div class="pain-item">
+          <span>🔴</span>
+          <span style="font-size:13px;">Registrar manualmente quem recebeu a comunicação</span>
+        </div>
+        <div class="pain-item">
+          <span>🔴</span>
+          <span style="font-size:13px;">Interromper outras atividades produtivas por horas</span>
+        </div>
+        <div class="pain-item">
+          <span>🔴</span>
+          <span style="font-size:13px;">Risco de enviar mensagens duplicadas ou esquecer contatos</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-right">
+      <div class="card" style="width:100%;padding:20px 24px;">
+        <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">Simulação — 100 contatos</div>
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:#ef4444;font-weight:600;">Manual</span>
+            <span style="font-size:12px;color:var(--fg2);">100–200 min</span>
+          </div>
+          <div class="pbar-wrap"><div class="pbar" style="width:100%;background:#ef4444;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:var(--green);font-weight:600;">Automatizado</span>
+            <span style="font-size:12px;color:var(--fg2);">10–20 min</span>
+          </div>
+          <div class="pbar-wrap"><div class="pbar pbar-green" style="width:14%;"></div></div>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:rgba(16,208,120,.08);border:1px solid rgba(16,208,120,.2);border-radius:10px;text-align:center;">
+          <div style="font-size:11px;color:var(--fg3);margin-bottom:4px;">Redução potencial de trabalho manual</div>
+          <div style="font-size:28px;font-weight:900;color:var(--green);">~85%</div>
+          <div style="font-size:11px;color:var(--fg3);">Cenário ilustrativo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 6 — SVC1 QUOTE ============ -->
+<div class="slide bg-cover">
+  <div class="quote-slide">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">"Sua equipe deve <span>vender</span>,<br>não passar horas copiando<br>e colando mensagens."</div>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+      <div class="card" style="padding:12px 20px;text-align:center;">
+        <div style="font-size:22px;font-weight:800;color:var(--blue);">100–200 min</div>
+        <div class="caption">processo manual</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--fg3);font-size:20px;">→</div>
+      <div class="card card-glow-green" style="padding:12px 20px;text-align:center;">
+        <div style="font-size:22px;font-weight:800;color:var(--green);">10–20 min</div>
+        <div class="caption">preparar a campanha</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 7 — SVC2 PROBLEMA ============ -->
+<div class="slide bg-s3">
+  <div class="cols2 w100" style="max-width:1000px;">
+    <div class="col-left">
+      <div class="svc-tag tag-green">Serviço 2 — Controle de Inadimplência</div>
+      <h2>Cobrar manualmente<br>é trabalhoso e<br><span style="color:#ef4444;">sujeito a erros.</span></h2>
+      <p class="lead">Com 200 clientes, o controle manual pode consumir 50 a 100 minutos diários — apenas verificando planilhas e enviando cobranças.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Verificar manualmente vencimentos na planilha todos os dias</span></div>
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Cobranças duplicadas ou clientes esquecidos</span></div>
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Sem histórico organizado de quem foi cobrado e quando</span></div>
+      </div>
+    </div>
+    <div class="col-right">
+      <div class="card card-glow-green" style="width:100%;">
+        <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;">Automação — 2 etapas definidas</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:12px;">
+            <div class="icon-box icon-amber" style="width:44px;height:44px;flex-shrink:0;">
+              <span style="font-size:16px;font-weight:800;">1</span>
+            </div>
+            <div>
+              <div style="font-weight:700;color:var(--amber);font-size:14px;">1º Aviso</div>
+              <div class="caption">4 dias após o vencimento — lembrete amigável</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;">
+            <div class="icon-box icon-red" style="width:44px;height:44px;flex-shrink:0;">
+              <span style="font-size:16px;font-weight:800;">2</span>
+            </div>
+            <div>
+              <div style="font-weight:700;color:#ef4444;font-size:14px;">2º Aviso</div>
+              <div class="caption">10 dias após o vencimento — notificação de urgência</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px;border-radius:8px;background:rgba(255,255,255,.04);font-size:12px;color:var(--fg2);">
+          ✓ Verifica pagamentos confirmados antes de enviar<br>
+          ✓ Não repete avisos já registrados<br>
+          ✓ Respeita a autorização do cliente
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 8 — SVC2 DASHBOARD ============ -->
+<div class="slide bg-s3">
+  <div class="w100" style="max-width:1000px;">
+    <div class="svc-tag tag-green" style="margin-bottom:14px;">Painel Financeiro Integrado</div>
+    <h2 style="margin-bottom:20px;text-align:center;">Visualize toda a inadimplência<br><span class="grad-green">em um único painel</span></h2>
+    <div class="card" style="padding:20px 24px;border-color:rgba(16,208,120,.2);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--green);"></div>
+        <span style="font-size:12px;color:var(--fg2);">Dashboard Financeiro — Dados Demonstrativos</span>
+        <span style="margin-left:auto;font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(245,158,11,.15);color:var(--amber);font-weight:600;">DEMO</span>
+      </div>
+      <div class="mini-dash" style="grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px;">
+        <div class="mini-kpi"><div class="mini-kpi-val" style="color:var(--blue);">200</div><div class="mini-kpi-lbl">Clientes</div></div>
+        <div class="mini-kpi"><div class="mini-kpi-val" style="color:var(--green);">142</div><div class="mini-kpi-lbl">Em Dia</div></div>
+        <div class="mini-kpi"><div class="mini-kpi-val" style="color:#ef4444;">34</div><div class="mini-kpi-lbl">Inadimplentes</div></div>
+        <div class="mini-kpi"><div class="mini-kpi-val" style="color:var(--amber);">R$12.4k</div><div class="mini-kpi-lbl">Em Aberto</div></div>
+        <div class="mini-kpi"><div class="mini-kpi-val" style="color:var(--amber);">18</div><div class="mini-kpi-lbl">1º Aviso</div></div>
+        <div class="mini-kpi"><div class="mini-kpi-val" style="color:#ef4444;">16</div><div class="mini-kpi-lbl">2º Aviso</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div>
+          <div style="font-size:10px;color:var(--fg3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Distribuição de Status</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+              <div style="width:60%;height:6px;border-radius:3px;background:var(--blue);"></div>
+              <span style="color:var(--fg2);">Em dia — 60%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+              <div style="width:25%;height:6px;border-radius:3px;background:var(--green);"></div>
+              <span style="color:var(--fg2);">Pagos — 25%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+              <div style="width:15%;height:6px;border-radius:3px;background:#ef4444;"></div>
+              <span style="color:var(--fg2);">Atrasados — 15%</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--fg3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Cobranças Esta Semana</div>
+          <div style="display:flex;align-items:flex-end;gap:4px;height:48px;">
+            <div style="flex:1;background:rgba(79,142,247,.4);border-radius:3px 3px 0 0;height:60%;"></div>
+            <div style="flex:1;background:rgba(79,142,247,.4);border-radius:3px 3px 0 0;height:80%;"></div>
+            <div style="flex:1;background:var(--blue);border-radius:3px 3px 0 0;height:100%;"></div>
+            <div style="flex:1;background:rgba(79,142,247,.4);border-radius:3px 3px 0 0;height:50%;"></div>
+            <div style="flex:1;background:rgba(79,142,247,.4);border-radius:3px 3px 0 0;height:70%;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--fg3);margin-top:3px;"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 9 — SVC2 QUOTE ============ -->
+<div class="slide bg-cover">
+  <div class="quote-slide">
+    <div class="quote-mark" style="background:linear-gradient(135deg,#10d078,#4f8ef7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">"</div>
+    <div class="quote-text">"Enquanto você cuida da empresa,<br>a automação <span style="color:var(--green);">acompanha os vencimentos.</span>"</div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:600px;">
+      <div class="cmp-row cmp-manual">
+        <div class="cmp-label red">Processo Manual</div>
+        <div class="cmp-value" style="color:#ef4444;">50–100</div>
+        <div class="cmp-desc">minutos por dia com 200 clientes</div>
+      </div>
+      <div class="cmp-row cmp-auto">
+        <div class="cmp-label green">Com Automação</div>
+        <div class="cmp-value" style="color:var(--green);">10–20</div>
+        <div class="cmp-desc">minutos de supervisão diária</div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:14px;">* Estimativas ilustrativas. Resultado varia conforme o volume e a operação.</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 10 — SVC2 CUSTO DA VERGONHA ============ -->
+<div class="slide bg-s2">
+  <div class="w100" style="max-width:1060px;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+      <div class="svc-tag tag-green">Controle de Inadimplência</div>
+      <span style="font-size:12px;color:var(--fg3);">— o custo de evitar a cobrança</span>
+    </div>
+    <div class="cols2" style="align-items:flex-start;gap:clamp(14px,2.5vw,36px);">
+
+      <!-- ESQUERDA: contexto + segmentos -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <h2 style="font-size:clamp(20px,2.8vw,36px);margin-bottom:12px;">A cobrança que nunca<br>acontece também<br><span style="color:#ef4444;">tem um preço.</span></h2>
+          <p class="lead" style="font-size:clamp(13px,1.3vw,16px);">Muitos prestadores de serviço evitam cobrar por desconforto, falta de tempo ou medo de constranger o cliente. O resultado: dinheiro que nunca entra.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="pain-item"><span>🔴</span><span style="font-size:13px;">"Vou cobrar semana que vem" — e nunca cobra</span></div>
+          <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Cliente atrasa 30, 60, 90 dias e continua sendo atendido</span></div>
+          <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Sem histórico: não sabe quem deve nem há quanto tempo</span></div>
+          <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Cobrar pessoalmente constrange — e o relacionamento pesa</span></div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Quem sofre mais com isso</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span class="seg">🏋️ Personal trainer</span>
+            <span class="seg">🎵 Professor particular</span>
+            <span class="seg">🐾 Adestrador / pet sitter</span>
+            <span class="seg">🧹 Diarista / limpeza</span>
+            <span class="seg">🎓 Reforço escolar</span>
+            <span class="seg">💆 Massagista</span>
+            <span class="seg">🧑‍🍳 Chef particular</span>
+            <span class="seg">🚗 Motorista / mototaxi fixo</span>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--fg3);">Serviços recorrentes sem contrato formal ou débito automático — pagamento depende de o próprio prestador cobrar.</div>
+        </div>
+      </div>
+
+      <!-- DIREITA: calculadora -->
+      <div class="card card-glow-green" style="padding:clamp(14px,2vw,24px);">
+        <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;">Quanto está parado sem cobrança?</div>
+
+        <div style="margin-bottom:11px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:12px;color:var(--fg2);">Clientes ativos</span>
+            <span id="inad-cli-val" style="font-size:12px;font-weight:700;color:var(--fg);">30</span>
+          </div>
+          <input type="range" id="inad-cli" min="5" max="100" value="30" step="5" style="width:100%;accent-color:#10d078;cursor:pointer;" oninput="inadCalc()">
+        </div>
+
+        <div style="margin-bottom:11px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:12px;color:var(--fg2);">Mensalidade média (R$)</span>
+            <span id="inad-men-val" style="font-size:12px;font-weight:700;color:var(--fg);">R$ 300</span>
+          </div>
+          <input type="range" id="inad-men" min="100" max="1500" value="300" step="50" style="width:100%;accent-color:#10d078;cursor:pointer;" oninput="inadCalc()">
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:12px;color:var(--fg2);">% que atrasa/evita sem cobrança</span>
+            <span id="inad-pct-val" style="font-size:12px;font-weight:700;color:#ef4444;">20%</span>
+          </div>
+          <input type="range" id="inad-pct" min="5" max="50" value="20" step="5" style="width:100%;accent-color:#ef4444;cursor:pointer;" oninput="inadCalc()">
+        </div>
+
+        <!-- RESULTADOS -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;">
+          <div style="text-align:center;padding:9px 6px;background:rgba(0,0,0,.2);border-radius:9px;border:1px solid rgba(255,255,255,.06);">
+            <div style="font-size:9px;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">Em aberto/mês</div>
+            <div id="inad-month" style="font-size:clamp(13px,1.8vw,18px);font-weight:900;color:#ef4444;">R$ 1.800</div>
+            <div id="inad-cli-miss" style="font-size:10px;color:var(--fg3);margin-top:2px;">6 clientes</div>
+          </div>
+          <div style="text-align:center;padding:9px 6px;background:rgba(0,0,0,.2);border-radius:9px;border:1px solid rgba(255,255,255,.06);">
+            <div style="font-size:9px;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">Acumulado/trim.</div>
+            <div id="inad-trim" style="font-size:clamp(13px,1.8vw,18px);font-weight:900;color:#ef4444;">R$ 5.400</div>
+            <div style="font-size:10px;color:var(--fg3);margin-top:2px;">3 meses</div>
+          </div>
+          <div style="text-align:center;padding:9px 6px;background:rgba(239,68,68,.12);border-radius:9px;border:1px solid rgba(239,68,68,.3);">
+            <div style="font-size:9px;color:#ef4444;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;font-weight:700;">No ano</div>
+            <div id="inad-year" style="font-size:clamp(13px,1.8vw,18px);font-weight:900;color:#ef4444;">R$ 21.600</div>
+            <div style="font-size:10px;color:var(--fg3);margin-top:2px;">deixou de faturar</div>
+          </div>
+        </div>
+
+        <div style="padding:10px 14px;background:rgba(16,208,120,.08);border:1px solid rgba(16,208,120,.25);border-radius:10px;margin-bottom:8px;">
+          <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:3px;">Com cobrança automática por WhatsApp</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:11px;color:var(--fg2);">Recuperação estimada (60%)</span>
+            <span id="inad-recover" style="font-size:14px;font-weight:900;color:var(--green);">+ R$ 12.960/ano</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--fg3);">A automação cobra no lugar do prestador — sem constrangimento, no momento certo, com mensagem personalizada.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+function inadFmt(v){return'R$ '+Math.round(v).toLocaleString('pt-BR');}
+window.inadCalc=function(){
+  var cli=+document.getElementById('inad-cli').value;
+  var men=+document.getElementById('inad-men').value;
+  var pct=+document.getElementById('inad-pct').value/100;
+  var missMonth=Math.round(cli*pct);
+  var lossMonth=missMonth*men;
+  document.getElementById('inad-cli-val').textContent=cli;
+  document.getElementById('inad-men-val').textContent='R$ '+men;
+  document.getElementById('inad-pct-val').textContent=Math.round(pct*100)+'%';
+  document.getElementById('inad-month').textContent=inadFmt(lossMonth);
+  document.getElementById('inad-trim').textContent=inadFmt(lossMonth*3);
+  document.getElementById('inad-year').textContent=inadFmt(lossMonth*12);
+  document.getElementById('inad-cli-miss').textContent=missMonth+' clientes';
+  document.getElementById('inad-recover').textContent='+ '+inadFmt(lossMonth*12*0.6)+'/ano';
+};
+inadCalc();
+})();
+</script>
+
+<!-- ============ SLIDE 11 — SVC3 NO-SHOW ============ -->
+<div class="slide bg-s3">
+  <div class="cols2 w100" style="max-width:1000px;">
+    <div class="col-left">
+      <div class="svc-tag tag-purple">Serviço 3 — Redução de No-Show</div>
+      <h2>Um horário vazio<br>não volta atrás.</h2>
+      <p class="lead" style="margin-bottom:16px;"><strong style="color:#ef4444;">No-show</strong> é quando o cliente agenda e não aparece — sem cancelar. Cada falta representa um horário perdido que poderia ter sido preenchido.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Profissional ocioso, agenda ineficiente</span></div>
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Outros clientes não conseguiram aquele horário</span></div>
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">Recepção precisa ligar ou enviar mensagem individualmente</span></div>
+        <div class="pain-item"><span>🔴</span><span style="font-size:13px;">30–60 min gastos com lembretes manuais para 30 agendamentos</span></div>
+      </div>
+    </div>
+    <div class="col-right">
+      <div class="card card-glow-purple" style="width:100%;">
+        <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;">Setores mais afetados</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);">
+            <span style="font-size:13px;">🏥 Clínicas e Consultórios</span>
+            <span class="svc-tag tag-purple" style="padding:3px 10px;font-size:10px;">Alto impacto</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);">
+            <span style="font-size:13px;">✂️ Salões e Barbearias</span>
+            <span class="svc-tag tag-purple" style="padding:3px 10px;font-size:10px;">Alto impacto</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);">
+            <span style="font-size:13px;">🐾 Pet Shops</span>
+            <span class="svc-tag tag-purple" style="padding:3px 10px;font-size:10px;">Alto impacto</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);">
+            <span style="font-size:13px;">🏋️ Academias e Estúdios</span>
+            <span class="svc-tag tag-purple" style="padding:3px 10px;font-size:10px;">Médio impacto</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 11 — SVC3 SOLUÇÃO ============ -->
+<div class="slide bg-s3">
+  <div class="cols2 w100" style="max-width:1000px;">
+    <div class="col-left">
+      <div class="svc-tag tag-purple">Como Funciona</div>
+      <h2 style="margin-bottom:14px;">Lembrete automático.<br>Presença confirmada.</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="check-item"><span>✓</span><span style="font-size:13px;"><strong>24h antes:</strong> lembrete personalizado com nome, serviço e horário</span></div>
+        <div class="check-item"><span>✓</span><span style="font-size:13px;"><strong>2h antes:</strong> confirmação final e instruções relevantes</span></div>
+        <div class="check-item"><span>✓</span><span style="font-size:13px;">Intervalo configurável conforme a operação do negócio</span></div>
+        <div class="check-item"><span>✓</span><span style="font-size:13px;">Sem mensagens duplicadas — o sistema rastreia o que foi enviado</span></div>
+      </div>
+    </div>
+    <div class="col-right">
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-top"><div style="width:60px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);"></div></div>
+          <div class="chat-header">
+            <div class="chat-avatar">🐾</div>
+            <div><div class="chat-name">Pet Shop Exemplo</div><div class="chat-status">● Online</div></div>
+          </div>
+          <div class="chat-body">
+            <div class="msg msg-out">Olá, Mariana! Passando para lembrar que o banho do <strong>Thor</strong> está agendado para <strong>amanhã, às 14h</strong>. 🐶<div class="msg-time">quinta 20:00 ✓✓</div></div>
+            <div class="msg msg-in">Oi! Sim, confirmado! A gente vai estar lá 😊<div class="msg-time">quinta 20:03</div></div>
+            <div class="msg msg-out">Ótimo! Te esperamos amanhã às 14h. Qualquer dúvida, estamos à disposição! 🐾<div class="msg-time">quinta 20:03 ✓✓</div></div>
+          </div>
+          <div class="chat-input"><div class="chat-input-box">Mensagem</div></div>
+        </div>
+      </div>
+      <p class="caption" style="text-align:center;max-width:220px;">Demonstração ilustrativa de como funciona um lembrete automático</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 12 — SVC3 QUOTE ============ -->
+<div class="slide bg-cover">
+  <div class="quote-slide">
+    <div class="quote-mark" style="color:var(--purple);opacity:.15;">"</div>
+    <div class="quote-text">"Um horário <span style="color:var(--purple);">esquecido</span> pode representar<br>uma oportunidade perdida."</div>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:16px;justify-content:center;">
+      <div class="card" style="padding:16px 24px;text-align:center;">
+        <div style="font-size:11px;color:var(--fg3);margin-bottom:6px;">30 agendamentos/dia — processo manual</div>
+        <div style="font-size:28px;font-weight:900;color:#ef4444;">30–60 min</div>
+        <div style="font-size:11px;color:var(--fg3);">enviando lembretes individualmente</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--fg3);font-size:24px;">→</div>
+      <div class="card card-glow-purple" style="padding:16px 24px;text-align:center;">
+        <div style="font-size:11px;color:var(--fg3);margin-bottom:6px;">Com automação de lembretes</div>
+        <div style="font-size:28px;font-weight:900;color:var(--purple);">Automático</div>
+        <div style="font-size:11px;color:var(--fg3);">equipe foca nas exceções e no atendimento</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 13 — NO-SHOW CALCULADORA ============ -->
+<div class="slide bg-s3">
+  <div class="w100" style="max-width:1060px;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+      <div class="svc-tag tag-purple">O Custo Real do No-Show</div>
+      <span style="font-size:12px;color:var(--fg3);">— clique em uma profissão e ajuste os dados</span>
+    </div>
+    <div class="cols2" style="gap:clamp(14px,2.5vw,32px);align-items:flex-start;">
+
+      <!-- LISTA DE PROFISSÕES -->
+      <div style="display:flex;flex-direction:column;gap:4px;" id="ns-list">
+        <div class="ns-item" data-i="0" onclick="nsSelect(0)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid rgba(79,142,247,.4);background:rgba(79,142,247,.12);">
+          <span style="font-size:16px;">🦷</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Dentista</div><div style="font-size:11px;color:var(--fg3);">R$ 200 · 15% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="1" onclick="nsSelect(1)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">👁️</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Oftalmologista</div><div style="font-size:11px;color:var(--fg3);">R$ 300 · 22% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="2" onclick="nsSelect(2)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">🧠</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Psicólogo</div><div style="font-size:11px;color:var(--fg3);">R$ 150 · 25% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="3" onclick="nsSelect(3)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">🩺</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Dermatologista</div><div style="font-size:11px;color:var(--fg3);">R$ 350 · 20% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="4" onclick="nsSelect(4)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">🥗</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Nutricionista</div><div style="font-size:11px;color:var(--fg3);">R$ 200 · 18% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="5" onclick="nsSelect(5)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">🤸</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Fisioterapeuta</div><div style="font-size:11px;color:var(--fg3);">R$ 120 · 20% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="6" onclick="nsSelect(6)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">👶</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Ginecologista</div><div style="font-size:11px;color:var(--fg3);">R$ 300 · 16% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="7" onclick="nsSelect(7)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">🫀</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Cardiologista</div><div style="font-size:11px;color:var(--fg3);">R$ 300 · 18% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+        <div class="ns-item" data-i="8" onclick="nsSelect(8)" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--border);">
+          <span style="font-size:16px;">✨</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg);">Clínica de Estética</div><div style="font-size:11px;color:var(--fg3);">R$ 250 · 25% no-show</div></div><div class="ns-loss" style="font-size:12px;font-weight:700;color:#ef4444;text-align:right;"></div>
+        </div>
+      </div>
+
+      <!-- CALCULADORA -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card card-glow-purple" style="padding:clamp(14px,2vw,24px);">
+          <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;" id="ns-name-label">Dentista</div>
+
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+              <span style="font-size:12px;color:var(--fg2);">Agendamentos por dia</span>
+              <span id="ns-apt-val" style="font-size:12px;font-weight:700;color:var(--fg);">10</span>
+            </div>
+            <input type="range" id="ns-apt" min="4" max="25" value="10" step="1"
+              style="width:100%;accent-color:#8b5cf6;cursor:pointer;" oninput="nsCalc()">
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+              <span style="font-size:12px;color:var(--fg2);">Valor da consulta (R$)</span>
+              <span id="ns-val-val" style="font-size:12px;font-weight:700;color:var(--fg);">R$ 200</span>
+            </div>
+            <input type="range" id="ns-val" min="80" max="700" value="200" step="10"
+              style="width:100%;accent-color:#8b5cf6;cursor:pointer;" oninput="nsCalc()">
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+              <span style="font-size:12px;color:var(--fg2);">Taxa de no-show</span>
+              <span id="ns-pct-val" style="font-size:12px;font-weight:700;color:#ef4444;">15%</span>
+            </div>
+            <input type="range" id="ns-pct" min="5" max="40" value="15" step="1"
+              style="width:100%;accent-color:#ef4444;cursor:pointer;" oninput="nsCalc()">
+          </div>
+
+          <!-- RESULTADOS -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div style="text-align:center;padding:10px 6px;background:rgba(0,0,0,.2);border-radius:10px;border:1px solid rgba(255,255,255,.06);">
+              <div style="font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Semana</div>
+              <div id="ns-week" style="font-size:clamp(14px,2vw,20px);font-weight:900;color:#ef4444;">R$ 1.500</div>
+              <div id="ns-miss-week" style="font-size:10px;color:var(--fg3);margin-top:2px;">8 faltas</div>
+            </div>
+            <div style="text-align:center;padding:10px 6px;background:rgba(0,0,0,.2);border-radius:10px;border:1px solid rgba(255,255,255,.06);">
+              <div style="font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Mês</div>
+              <div id="ns-month" style="font-size:clamp(14px,2vw,20px);font-weight:900;color:#ef4444;">R$ 6.000</div>
+              <div id="ns-miss-month" style="font-size:10px;color:var(--fg3);margin-top:2px;">30 faltas</div>
+            </div>
+            <div style="text-align:center;padding:10px 6px;background:rgba(239,68,68,.12);border-radius:10px;border:1px solid rgba(239,68,68,.3);">
+              <div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:700;">Ano</div>
+              <div id="ns-year" style="font-size:clamp(14px,2vw,20px);font-weight:900;color:#ef4444;">R$ 72.000</div>
+              <div id="ns-miss-year" style="font-size:10px;color:var(--fg3);margin-top:2px;">360 faltas</div>
+            </div>
+          </div>
+
+          <div style="padding:10px 14px;background:rgba(16,208,120,.08);border:1px solid rgba(16,208,120,.25);border-radius:10px;">
+            <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:3px;">Com lembrete automático por WhatsApp</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:11px;color:var(--fg2);">Recuperação estimada (45%)</span>
+              <span id="ns-recover" style="font-size:14px;font-weight:900;color:var(--green);">+ R$ 32.400/ano</span>
+            </div>
+          </div>
+        </div>
+        <p class="caption" style="text-align:center;">Dados de mercado — estimativas ilustrativas. Resultado real varia por operação.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+var nsProfs=[
+  {name:'Dentista',       val:200,ns:15,apts:10},
+  {name:'Oftalmologista', val:300,ns:22,apts:12},
+  {name:'Psicólogo',      val:150,ns:25,apts:8},
+  {name:'Dermatologista', val:350,ns:20,apts:12},
+  {name:'Nutricionista',  val:200,ns:18,apts:8},
+  {name:'Fisioterapeuta', val:120,ns:20,apts:10},
+  {name:'Ginecologista',  val:300,ns:16,apts:10},
+  {name:'Cardiologista',  val:300,ns:18,apts:10},
+  {name:'Clínica Estética',val:250,ns:25,apts:10}
+];
+function nsFmt(v){return'R$ '+Math.round(v).toLocaleString('pt-BR');}
+function nsUpdateLosses(){
+  nsProfs.forEach(function(p,i){
+    var missDay=p.apts*(p.ns/100);
+    var lossMonth=missDay*p.val*20;
+    var cells=document.querySelectorAll('.ns-loss');
+    if(cells[i]) cells[i].textContent=nsFmt(lossMonth)+'/mês';
+  });
+}
+window.nsSelect=function(i){
+  var p=nsProfs[i];
+  document.getElementById('ns-apt').value=p.apts;
+  document.getElementById('ns-val').value=p.val;
+  document.getElementById('ns-pct').value=p.ns;
+  document.getElementById('ns-name-label').textContent=p.name;
+  document.querySelectorAll('.ns-item').forEach(function(el,j){
+    el.style.border=j===i?'1px solid rgba(139,92,246,.5)':'1px solid var(--border)';
+    el.style.background=j===i?'rgba(139,92,246,.1)':'transparent';
+  });
+  nsCalc();
+};
+window.nsCalc=function(){
+  var apt=+document.getElementById('ns-apt').value;
+  var val=+document.getElementById('ns-val').value;
+  var pct=+document.getElementById('ns-pct').value;
+  document.getElementById('ns-apt-val').textContent=apt;
+  document.getElementById('ns-val-val').textContent='R$ '+val;
+  document.getElementById('ns-pct-val').textContent=pct+'%';
+  var missDay=apt*(pct/100);
+  var missWeek=Math.round(missDay*5);
+  var missMonth=Math.round(missDay*20);
+  var missYear=Math.round(missDay*240);
+  var lW=missWeek*val; var lM=missMonth*val; var lY=missYear*val;
+  document.getElementById('ns-week').textContent=nsFmt(lW);
+  document.getElementById('ns-month').textContent=nsFmt(lM);
+  document.getElementById('ns-year').textContent=nsFmt(lY);
+  document.getElementById('ns-miss-week').textContent=missWeek+' faltas';
+  document.getElementById('ns-miss-month').textContent=missMonth+' faltas';
+  document.getElementById('ns-miss-year').textContent=missYear+' faltas';
+  document.getElementById('ns-recover').textContent='+ '+nsFmt(lY*0.45)+'/ano';
+};
+nsUpdateLosses();
+nsCalc();
+})();
+</script>
+
+<!-- ============ SLIDE 14 — SVC4 ABERTURA ============ -->
+<div class="slide" style="background:radial-gradient(ellipse 100% 80% at 50% 0%,rgba(245,158,11,.18) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 80% 80%,rgba(139,92,246,.18) 0%,transparent 60%),var(--bg);">
+  <div style="text-align:center;max-width:900px;">
+    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(245,158,11,.12);border:2px solid rgba(245,158,11,.4);border-radius:30px;padding:8px 20px;margin-bottom:24px;">
+      <span style="font-size:16px;">★</span>
+      <span style="font-size:13px;font-weight:700;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;">Serviço Principal</span>
+    </div>
+    <h1 style="margin-bottom:20px;">WhatsApp Inteligente<br><span style="background:linear-gradient(135deg,var(--amber),#ef4444,var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">com Inteligência Artificial</span></h1>
+    <p class="lead" style="max-width:680px;margin:0 auto 32px;">Um assistente virtual conectado ao seu WhatsApp empresarial que responde, agenda, esclarece dúvidas e conversa naturalmente com seus clientes — enquanto sua equipe foca no que mais importa.</p>
+    <div class="cols4" style="max-width:800px;margin:0 auto;">
+      <div style="text-align:center;padding:14px;">
+        <div style="font-size:28px;margin-bottom:8px;">💬</div>
+        <div style="font-size:11px;font-weight:600;color:var(--fg2);">Texto</div>
+      </div>
+      <div style="text-align:center;padding:14px;">
+        <div style="font-size:28px;margin-bottom:8px;">🎙️</div>
+        <div style="font-size:11px;font-weight:600;color:var(--fg2);">Áudio</div>
+      </div>
+      <div style="text-align:center;padding:14px;">
+        <div style="font-size:28px;margin-bottom:8px;">📷</div>
+        <div style="font-size:11px;font-weight:600;color:var(--fg2);">Imagens</div>
+      </div>
+      <div style="text-align:center;padding:14px;">
+        <div style="font-size:28px;margin-bottom:8px;">📅</div>
+        <div style="font-size:11px;font-weight:600;color:var(--fg2);">Agendamento</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 14 — SVC4 O PROBLEMA ============ -->
+<div class="slide bg-s2">
+  <div class="cols2 w100" style="max-width:1000px;">
+    <div class="col-left">
+      <div class="svc-tag tag-amber">O Problema</div>
+      <h2>Perguntas repetitivas<br>consomem o dia da<br><span style="color:#ef4444;">sua equipe.</span></h2>
+      <p class="lead" style="margin-bottom:16px;">80 conversas por dia × 3–5 minutos = até 6h40 de atendimento rotineiro.</p>
+      <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:16px;font-size:13px;line-height:2;color:var(--fg2);">
+        <div>❓ "Qual o preço do banho?"</div>
+        <div>❓ "Vocês têm horário amanhã?"</div>
+        <div>❓ "Qual o endereço?"</div>
+        <div>❓ "Aceitam gatos?"</div>
+        <div>❓ "Posso remarcar para sexta?"</div>
+        <div>❓ "Como funciona o serviço?"</div>
+      </div>
+      <p class="caption" style="margin-top:10px;">Essas perguntas se repetem dezenas de vezes por dia.</p>
+    </div>
+    <div class="col-right">
+      <div class="card" style="width:100%;padding:20px 24px;">
+        <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">Simulação — 80 conversas/dia</div>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:#ef4444;font-weight:600;">Atendimento Manual</span>
+            <span style="font-size:12px;color:var(--fg2);">240–400 min/dia</span>
+          </div>
+          <div class="pbar-wrap"><div class="pbar" style="width:100%;background:#ef4444;"></div></div>
+          <div style="font-size:11px;color:var(--fg3);margin-top:4px;">4h a 6h40 do expediente</div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:var(--green);font-weight:600;">70% Automatizável</span>
+            <span style="font-size:12px;color:var(--fg2);">56 conversas</span>
+          </div>
+          <div class="pbar-wrap"><div class="pbar pbar-green" style="width:70%;"></div></div>
+          <div style="font-size:11px;color:var(--fg3);margin-top:4px;">Consultas rotineiras de preço, horário, agendamento</div>
+        </div>
+        <div style="padding:12px;background:rgba(16,208,120,.08);border:1px solid rgba(16,208,120,.2);border-radius:10px;text-align:center;">
+          <div style="font-size:11px;color:var(--fg3);margin-bottom:3px;">Economia potencial de trabalho humano</div>
+          <div style="font-size:30px;font-weight:900;color:var(--green);">~2h48–4h40/dia</div>
+          <div style="font-size:10px;color:var(--fg3);">Cenário ilustrativo — varia conforme o tipo de atendimento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 15 — SVC4 CAPACIDADES ============ -->
+<div class="slide bg-s4">
+  <div class="w100" style="max-width:1000px;">
+    <div class="svc-tag tag-amber" style="margin-bottom:16px;">Capacidades do Assistente</div>
+    <h2 style="margin-bottom:24px;text-align:center;">O cliente envia do jeito que preferir.<br><span class="grad-green">O assistente entende.</span></h2>
+    <div class="cols3">
+      <div class="card card-glow-blue" style="padding:clamp(16px,2.5vw,28px);">
+        <div style="font-size:32px;margin-bottom:12px;">💬</div>
+        <h3 style="font-size:16px;margin-bottom:8px;">Texto</h3>
+        <p class="caption" style="font-size:12px;line-height:1.6;">O cliente digita naturalmente. O assistente interpreta o contexto, faz perguntas quando necessário e responde com clareza — sem respostas robóticas ou confusas.</p>
+        <div style="margin-top:12px;background:rgba(255,255,255,.04);border-radius:8px;padding:10px;font-size:11px;color:var(--fg2);">
+          <div style="color:var(--blue);">Cliente:</div> "Quanto custa um banho?"
+          <div style="color:var(--blue);margin-top:6px;">IA:</div> "Para cachorro ou gato? Me diz o porte que consigo o valor! 😊"
+        </div>
+      </div>
+      <div class="card card-glow-purple" style="padding:clamp(16px,2.5vw,28px);">
+        <div style="font-size:32px;margin-bottom:12px;">🎙️</div>
+        <h3 style="font-size:16px;margin-bottom:8px;">Áudios</h3>
+        <p class="caption" style="font-size:12px;line-height:1.6;">O sistema transcreve a mensagem de voz para texto usando IA e então interpreta a solicitação do cliente, continuando a conversa normalmente. A qualidade depende do áudio e da transcrição.</p>
+        <div style="margin-top:12px;background:rgba(255,255,255,.04);border-radius:8px;padding:10px;font-size:11px;color:var(--fg2);">
+          🎤 <span style="font-style:italic;">"Queria saber se tem horário amanhã de manhã pro meu cachorro..."</span>
+          <div style="color:var(--purple);margin-top:6px;">→ Interpretado e processado como texto</div>
+        </div>
+      </div>
+      <div class="card card-glow-green" style="padding:clamp(16px,2.5vw,28px);">
+        <div style="font-size:32px;margin-bottom:12px;">📷</div>
+        <h3 style="font-size:16px;margin-bottom:8px;">Imagens</h3>
+        <p class="caption" style="font-size:12px;line-height:1.6;">O cliente envia uma foto do pet e pergunta o valor. O assistente analisa características visíveis, consulta a tabela de preços e pede informações adicionais quando não consegue determinar com segurança.</p>
+        <div style="margin-top:12px;background:rgba(255,255,255,.04);border-radius:8px;padding:10px;font-size:11px;color:var(--fg2);">
+          📸 <span style="font-style:italic;">"Quanto custa o banho dele?"</span>
+          <div style="color:var(--green);margin-top:6px;">→ Analisa + consulta preços + confirma com cliente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 16 — SVC4 DEMO CONVERSA ============ -->
+<div class="slide bg-s4">
+  <div class="cols2 w100" style="max-width:1000px;align-items:flex-start;">
+    <div class="col-left">
+      <div class="svc-tag tag-amber" style="margin-bottom:12px;">Demonstração — Agendamento Completo</div>
+      <h2 style="font-size:clamp(20px,2.5vw,34px);margin-bottom:16px;">Do "Olá" ao<br>agendamento confirmado.</h2>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="check-item"><span>①</span><span style="font-size:12px;color:var(--fg2);">Cliente envia mensagem de texto, áudio ou foto</span></div>
+        <div class="check-item"><span>②</span><span style="font-size:12px;color:var(--fg2);">IA interpreta e coleta informações necessárias</span></div>
+        <div class="check-item"><span>③</span><span style="font-size:12px;color:var(--fg2);">Consulta disponibilidade real na agenda</span></div>
+        <div class="check-item"><span>④</span><span style="font-size:12px;color:var(--fg2);">Apresenta serviço, valor e horário disponível</span></div>
+        <div class="check-item"><span>⑤</span><span style="font-size:12px;color:var(--fg2);">Aguarda confirmação do cliente</span></div>
+        <div class="check-item"><span>⑥</span><span style="font-size:12px;color:var(--fg2);">Registra automaticamente na agenda</span></div>
+      </div>
+      <div style="margin-top:16px;padding:12px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);">
+        <div style="font-size:12px;color:var(--amber);font-weight:600;margin-bottom:4px;">Integração com agenda</div>
+        <div class="caption">Google Calendar ou ferramenta de agendamento compatível — o compromisso é registrado automaticamente após a confirmação do cliente.</div>
+      </div>
+    </div>
+    <div class="col-right">
+      <div class="phone-wrap" style="width:clamp(190px,20vw,270px);">
+        <div class="phone-frame">
+          <div class="phone-top"><div style="width:60px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);"></div></div>
+          <div class="chat-header">
+            <div class="chat-avatar">🐾</div>
+            <div><div class="chat-name">Pet Shop</div><div class="chat-status">● Assistente IA</div></div>
+          </div>
+          <div class="chat-body" style="min-height:340px;">
+            <div class="msg msg-in">Oi, quero agendar banho pro Thor amanhã 🐕<div class="msg-time">09:14</div></div>
+            <div class="msg msg-out">Oi! Claro, que ótimo! 😊 Pode me dizer o porte do Thor?<div class="msg-time">09:14 ✓✓</div></div>
+            <div class="msg msg-in">Grande! Golden Retriever<div class="msg-time">09:15</div></div>
+            <div class="msg msg-out">Que lindo! 🐾 Para porte grande, o banho custa R$ 85,00. Qual horário você prefere amanhã?<div class="msg-time">09:15 ✓✓</div></div>
+            <div class="msg-audio"><span style="font-size:16px;">🎙️</span><div style="width:70px;height:3px;background:rgba(255,255,255,.3);border-radius:2px;"></div><span style="font-size:10px;color:#aaa;">0:04</span></div>
+            <div style="font-size:9px;color:var(--fg3);padding:4px 8px;font-style:italic;">Áudio transcrito: "Pode ser às 15h"</div>
+            <div class="msg msg-out">Às 15h está disponível! ✅<br><br>📋 <strong>Resumo:</strong><br>🐕 Banho — Golden Retriever<br>📅 Amanhã às 15h00<br>💰 R$ 85,00<br><br>Confirmo o agendamento?<div class="msg-time">09:17 ✓✓</div></div>
+            <div class="msg msg-in">Sim, confirma! 👍<div class="msg-time">09:17</div></div>
+            <div class="msg msg-out">Perfeito! Agendamento confirmado 🎉 Até amanhã às 15h!<div class="msg-time">09:17 ✓✓</div></div>
+          </div>
+          <div class="chat-input"><div class="chat-input-box">Mensagem</div></div>
+        </div>
+      </div>
+      <p class="caption" style="text-align:center;max-width:220px;margin-top:8px;">Demonstração ilustrativa do fluxo de agendamento</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 17 — SVC4 O QUE FAZER COM O TEMPO ============ -->
+<div class="slide bg-cover">
+  <div class="w100" style="max-width:1000px;">
+    <div class="svc-tag tag-amber" style="margin-bottom:16px;">O que fazer com o tempo economizado?</div>
+    <h2 style="margin-bottom:24px;text-align:center;">"Enquanto você trabalha no negócio,<br><span style="color:var(--amber);">seu WhatsApp continua atendendo."</span></h2>
+    <div class="cols3">
+      <div class="check-item" style="flex-direction:column;gap:4px;"><span style="font-size:16px;">🤝</span><span style="font-size:13px;font-weight:600;color:var(--fg);">Atender melhor os clientes presenciais</span></div>
+      <div class="check-item" style="flex-direction:column;gap:4px;"><span style="font-size:16px;">📈</span><span style="font-size:13px;font-weight:600;color:var(--fg);">Desenvolver campanhas e estratégias</span></div>
+      <div class="check-item" style="flex-direction:column;gap:4px;"><span style="font-size:16px;">👥</span><span style="font-size:13px;font-weight:600;color:var(--fg);">Supervisionar e treinar a equipe</span></div>
+      <div class="check-item" style="flex-direction:column;gap:4px;"><span style="font-size:16px;">💰</span><span style="font-size:13px;font-weight:600;color:var(--fg);">Cuidar das finanças do negócio</span></div>
+      <div class="check-item" style="flex-direction:column;gap:4px;"><span style="font-size:16px;">🌟</span><span style="font-size:13px;font-weight:600;color:var(--fg);">Melhorar a qualidade dos serviços</span></div>
+      <div class="check-item" style="flex-direction:column;gap:4px;"><span style="font-size:16px;">🚀</span><span style="font-size:13px;font-weight:600;color:var(--fg);">Planejar o crescimento da empresa</span></div>
+    </div>
+    <div style="margin-top:24px;text-align:center;">
+      <div style="display:inline-block;padding:16px 32px;border-radius:16px;background:rgba(245,158,11,.1);border:2px solid rgba(245,158,11,.3);">
+        <div style="font-size:11px;color:var(--fg3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">Disponível</div>
+        <div style="font-size:clamp(28px,4vw,52px);font-weight:900;color:var(--amber);">24h por dia</div>
+        <div style="font-size:12px;color:var(--fg2);margin-top:4px;">enquanto servidores e APIs estiverem disponíveis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 18 — COMPARATIVO GERAL ============ -->
+<div class="slide bg-s1">
+  <div class="w100" style="max-width:1060px;">
+    <div class="overline" style="text-align:center;margin-bottom:12px;">Resumo Executivo</div>
+    <h2 style="text-align:center;margin-bottom:24px;">As quatro automações —<br><span class="grad-blue">comparativo de impacto</span></h2>
+    <div style="overflow-x:auto;">
+      <table class="cmp-table" style="min-width:600px;">
+        <thead>
+          <tr>
+            <th>Serviço</th>
+            <th>Trabalho substituído</th>
+            <th>Tempo manual (estimado)</th>
+            <th>Economia potencial</th>
+            <th>Principal benefício</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="svc-tag tag-blue" style="font-size:11px;">① Disparo</span></td>
+            <td>Envio manual para 100 contatos</td>
+            <td>100–200 min</td>
+            <td>~80–90% do trabalho manual</td>
+            <td>Comunicação em escala</td>
+          </tr>
+          <tr>
+            <td><span class="svc-tag tag-green" style="font-size:11px;">② Inadimplência</span></td>
+            <td>Conferência e cobranças (200 clientes)</td>
+            <td>50–100 min/dia</td>
+            <td>30–90 min/dia</td>
+            <td>Organização financeira</td>
+          </tr>
+          <tr>
+            <td><span class="svc-tag tag-purple" style="font-size:11px;">③ No-Show</span></td>
+            <td>Lembretes individuais (30 agendamentos)</td>
+            <td>30–60 min/dia</td>
+            <td>Envio automático</td>
+            <td>Agenda mais previsível</td>
+          </tr>
+          <tr style="background:rgba(245,158,11,.04);">
+            <td><span class="svc-tag tag-amber" style="font-size:11px;">★ WhatsApp IA</span></td>
+            <td>Atendimento rotineiro (80 conversas/dia)</td>
+            <td>240–400 min/dia</td>
+            <td>168–280 min/dia¹</td>
+            <td>Atendimento 24h</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption" style="margin-top:14px;">¹ Considerando 70% de automação. Resultado depende da complexidade dos atendimentos e deve ser validado com dados reais. Os tempos são cenários ilustrativos — não medições comprovadas. Pode haver sobreposição entre atividades.</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 19 — SEGURANÇA ============ -->
+<div class="slide bg-s3">
+  <div class="w100" style="max-width:1000px;">
+    <div class="overline purple" style="text-align:center;margin-bottom:14px;">Segurança &amp; Responsabilidade</div>
+    <h2 style="text-align:center;margin-bottom:24px;">Tecnologia com<br><span style="color:var(--purple);">responsabilidade.</span></h2>
+    <div class="cols3">
+      <div class="card card-glow-purple">
+        <div style="font-size:24px;margin-bottom:10px;">🔒</div>
+        <h3 style="font-size:14px;margin-bottom:8px;">Privacidade e LGPD</h3>
+        <div style="font-size:12px;color:var(--fg2);line-height:1.7;">
+          ✓ Controle de autorização dos clientes<br>
+          ✓ Respeito ao consentimento<br>
+          ✓ Proteção de dados pessoais<br>
+          ✓ Uso responsável de mensagens
+        </div>
+      </div>
+      <div class="card card-glow-purple">
+        <div style="font-size:24px;margin-bottom:10px;">🛡️</div>
+        <h3 style="font-size:14px;margin-bottom:8px;">Controles Operacionais</h3>
+        <div style="font-size:12px;color:var(--fg2);line-height:1.7;">
+          ✓ Verificação de duplicações<br>
+          ✓ Registro de falhas<br>
+          ✓ Histórico de operações<br>
+          ✓ Monitoramento de erros
+        </div>
+      </div>
+      <div class="card card-glow-purple">
+        <div style="font-size:24px;margin-bottom:10px;">🤝</div>
+        <h3 style="font-size:14px;margin-bottom:8px;">Atendimento Humano</h3>
+        <div style="font-size:12px;color:var(--fg2);line-height:1.7;">
+          ✓ Encaminhamento para humanos<br>
+          ✓ Reconhece limitações da IA<br>
+          ✓ Supervisão disponível<br>
+          ✓ Sem promessas de perfeição
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:14px 20px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center;">
+      <p style="font-size:13px;color:var(--fg2);">A tecnologia não substitui o julgamento humano — ela assume as tarefas repetitivas para que sua equipe possa focar em situações que realmente precisam de atenção.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 22 — WHATSAPP CUSTO REAL ============ -->
+<div class="slide bg-s4">
+  <div class="w100" style="max-width:1060px;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+      <div class="svc-tag tag-amber">★ WhatsApp Inteligente com IA</div>
+      <span style="font-size:12px;color:var(--fg3);">— compare o custo real com um atendente humano</span>
+    </div>
+    <div class="cols2" style="align-items:flex-start;gap:clamp(14px,2.5vw,36px);">
+
+      <!-- CONTROLES -->
+      <div class="card card-glow-purple" style="padding:clamp(14px,2vw,24px);">
+        <div style="font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;">Ajuste os parâmetros</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:12px;color:var(--fg2);">Salário do atendente (R$)</span>
+            <span id="wa-sal-val" style="font-size:12px;font-weight:700;color:var(--fg);">R$ 2.000</span>
+          </div>
+          <input type="range" id="wa-sal" min="1500" max="5000" value="2000" step="100" style="width:100%;accent-color:#8b5cf6;cursor:pointer;" oninput="waCalc()">
+          <div style="font-size:10px;color:var(--fg3);margin-top:3px;">CLT inclui ~70% de encargos (INSS, FGTS, férias, 13º)</div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:12px;color:var(--fg2);">Implantação da automação (único)</span>
+            <span id="wa-setup-val" style="font-size:12px;font-weight:700;color:var(--green);">R$ 2.000</span>
+          </div>
+          <input type="range" id="wa-setup" min="1500" max="3000" value="2000" step="100" style="width:100%;accent-color:#10d078;cursor:pointer;" oninput="waCalc()">
+          <div style="font-size:10px;color:var(--fg3);margin-top:3px;">Pagamento único — sem recorrência de setup</div>
+        </div>
+
+        <div style="padding:10px 14px;background:rgba(16,208,120,.08);border:1px solid rgba(16,208,120,.2);border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;color:var(--fg2);">Manutenção mensal</span>
+          <span style="font-size:14px;font-weight:900;color:var(--green);">R$ 250/mês</span>
+        </div>
+        <div style="font-size:10px;color:var(--fg3);">Inclui suporte, atualizações e operação 24h/7d/365</div>
+
+        <!-- RESUMO DO INVESTIMENTO -->
+        <div style="margin-top:14px;padding:14px 16px;background:linear-gradient(135deg,rgba(16,208,120,.1),rgba(79,142,247,.06));border:2px solid rgba(16,208,120,.35);border-radius:12px;">
+          <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Resumo do Investimento</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;color:var(--fg2);">Pagamento único</span>
+              <span id="wa-box-setup" style="font-size:15px;font-weight:800;color:var(--green);">R$ 2.000</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;color:var(--fg2);">Assinatura mensal</span>
+              <span style="font-size:15px;font-weight:800;color:var(--blue);">R$ 250/mês</span>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.08);margin:2px 0;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;color:var(--fg2);">Total no 1º ano</span>
+              <span id="wa-box-year1" style="font-size:16px;font-weight:900;color:var(--blue);">R$ 5.000</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:8px;margin-top:2px;">
+              <span style="font-size:12px;color:var(--amber);font-weight:600;">Economia vs CLT (ano 1)</span>
+              <span id="wa-box-eco" style="font-size:16px;font-weight:900;color:var(--amber);">R$ 35.800</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARAÇÃO -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- CARDS LADO A LADO: ANO 1 e ANO 2+ -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="padding:clamp(10px,1.5vw,16px);background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:14px;">
+            <div style="font-size:11px;font-weight:700;color:#ef4444;margin-bottom:8px;">👤 Atendente — Ano 1</div>
+            <div style="font-size:10px;color:var(--fg3);margin-bottom:3px;">Salário + encargos CLT</div>
+            <div id="wa-h-y1" style="font-size:clamp(16px,2.2vw,24px);font-weight:900;color:#ef4444;">R$ 40.800</div>
+          </div>
+          <div style="padding:clamp(10px,1.5vw,16px);background:rgba(16,208,120,.07);border:1px solid rgba(16,208,120,.25);border-radius:14px;">
+            <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:8px;">🤖 Automação — Ano 1</div>
+            <div style="font-size:10px;color:var(--fg3);margin-bottom:3px;">Setup + R$ 250 × 12</div>
+            <div id="wa-a-y1" style="font-size:clamp(16px,2.2vw,24px);font-weight:900;color:var(--green);">R$ 5.000</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="padding:clamp(10px,1.5vw,16px);background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:14px;">
+            <div style="font-size:11px;font-weight:700;color:#ef4444;margin-bottom:8px;">👤 Atendente — Ano 2+</div>
+            <div style="font-size:10px;color:var(--fg3);margin-bottom:3px;">Salário + encargos CLT</div>
+            <div id="wa-h-y2" style="font-size:clamp(16px,2.2vw,24px);font-weight:900;color:#ef4444;">R$ 40.800</div>
+          </div>
+          <div style="padding:clamp(10px,1.5vw,16px);background:rgba(16,208,120,.07);border:1px solid rgba(16,208,120,.25);border-radius:14px;">
+            <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:8px;">🤖 Automação — Ano 2+</div>
+            <div style="font-size:10px;color:var(--fg3);margin-bottom:3px;">Apenas R$ 250 × 12</div>
+            <div id="wa-a-y2" style="font-size:clamp(16px,2.2vw,24px);font-weight:900;color:var(--green);">R$ 3.000</div>
+          </div>
+        </div>
+
+        <!-- ECONOMIA -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:12px;">
+            <div style="font-size:10px;color:var(--amber);font-weight:700;margin-bottom:2px;">Economia Ano 1</div>
+            <div id="wa-eco-y1" style="font-size:clamp(14px,2vw,22px);font-weight:900;color:var(--amber);">R$ 35.800</div>
+          </div>
+          <div style="padding:10px 14px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);border-radius:12px;">
+            <div style="font-size:10px;color:var(--amber);font-weight:700;margin-bottom:2px;">Economia Ano 2+</div>
+            <div id="wa-eco-y2" style="font-size:clamp(14px,2vw,22px);font-weight:900;color:var(--amber);">R$ 37.800</div>
+          </div>
+        </div>
+
+        <div style="padding:8px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-size:10px;color:var(--fg3);">
+          🤖 Disponível 24h/dia, 7 dias/semana, 365 dias/ano — sem férias, faltas ou 13º
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+function waFmt(v){return'R$ '+Math.round(v).toLocaleString('pt-BR');}
+var MANUT=250;
+window.waCalc=function(){
+  var sal=+document.getElementById('wa-sal').value;
+  var setup=+document.getElementById('wa-setup').value;
+  var enc=Math.round(sal*0.70);
+  var hMonth=sal+enc;
+  var hYear=hMonth*12;
+  var aYear1=setup+(MANUT*12);
+  var aYear2=MANUT*12;
+  document.getElementById('wa-sal-val').textContent=waFmt(sal);
+  document.getElementById('wa-setup-val').textContent=waFmt(setup);
+  document.getElementById('wa-h-y1').textContent=waFmt(hYear);
+  document.getElementById('wa-h-y2').textContent=waFmt(hYear);
+  document.getElementById('wa-a-y1').textContent=waFmt(aYear1);
+  document.getElementById('wa-a-y2').textContent=waFmt(aYear2);
+  document.getElementById('wa-eco-y1').textContent=waFmt(hYear-aYear1);
+  document.getElementById('wa-eco-y2').textContent=waFmt(hYear-aYear2);
+  document.getElementById('wa-box-setup').textContent=waFmt(setup);
+  document.getElementById('wa-box-year1').textContent=waFmt(aYear1);
+  document.getElementById('wa-box-eco').textContent=waFmt(hYear-aYear1);
+};
+waCalc();
+})();
+</script>
+
+<!-- ============ SLIDE 23 — ENCERRAMENTO ============ -->
+<div class="slide" style="background:radial-gradient(ellipse 80% 60% at 30% 20%,rgba(79,142,247,.15) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 70% 80%,rgba(245,158,11,.12) 0%,transparent 60%),var(--bg);">
+  <div style="text-align:center;max-width:900px;width:100%;">
+    <div style="margin-bottom:24px;">
+      <h2 style="font-size:clamp(18px,2.5vw,32px);font-weight:400;color:var(--fg2);margin-bottom:12px;">A tecnologia não precisa substituir o atendimento humano.</h2>
+      <h1 style="font-size:clamp(22px,3.5vw,46px);">Ela pode assumir o repetitivo<br>para que sua equipe foque<br><span class="grad-blue">no que realmente importa.</span></h1>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:20px 0;">
+      <span class="svc-tag tag-blue">① Comunicação automatizada</span>
+      <span class="svc-tag tag-green">② Controle financeiro</span>
+      <span class="svc-tag tag-purple">③ Agenda organizada</span>
+      <span class="svc-tag tag-amber">★ Atendimento inteligente</span>
+    </div>
+    <div style="margin:24px 0;padding:16px 24px;border-radius:16px;background:rgba(245,158,11,.08);border:2px solid rgba(245,158,11,.3);">
+      <p style="font-size:clamp(16px,2vw,24px);font-weight:700;color:var(--amber);">"Descubra quanto tempo sua empresa<br>pode economizar com automações inteligentes."</p>
+    </div>
+    <div class="closing-contact" style="margin:0 auto;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--fg3);text-align:center;margin-bottom:4px;">Entre em contato</div>
+      <div class="contact-row">
+        <div class="icon-box icon-green" style="width:36px;height:36px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 15a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.83 4h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 11.9a16 16 0 0 0 5.99 6l1.27-.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 19.17z"/></svg>
+        </div>
+        <span class="contact-placeholder">Seu WhatsApp comercial</span>
+      </div>
+      <div class="contact-row">
+        <div class="icon-box icon-blue" style="width:36px;height:36px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <span class="contact-placeholder">Seu site / link de demonstração</span>
+      </div>
+      <div class="contact-row">
+        <div class="icon-box icon-purple" style="width:36px;height:36px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </div>
+        <span class="contact-placeholder">Suas redes sociais</span>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;">
+        <span class="contact-placeholder" style="font-size:14px;font-weight:600;color:var(--fg3);">Logotipo e nome da empresa aqui</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- NAV -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="go(-1)">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div id="dot-wrap"></div>
+  <span id="slide-counter">1 / 20</span>
+  <button class="nav-btn" id="btn-next" onclick="go(1)">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let cur = 0;
+
+const dotWrap = document.getElementById('dot-wrap');
+const counter = document.getElementById('slide-counter');
+const prog = document.getElementById('progress');
+
+// build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  dotWrap.appendChild(d);
+});
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(() => slides[cur < n ? cur : cur].classList.remove('out'), 500);
+  cur = n;
+  slides.forEach((s, i) => { s.classList.remove('active', 'out'); });
+  slides[cur].classList.add('active');
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  counter.textContent = `${cur + 1} / ${total}`;
+  prog.style.width = `${((cur + 1) / total) * 100}%`;
+  document.getElementById('btn-prev').disabled = cur === 0;
+  document.getElementById('btn-next').disabled = cur === total - 1;
+}
+
+function go(dir) { goTo(Math.max(0, Math.min(total - 1, cur + dir))); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
+});
+
+
+goTo(0);
+</script>
+
+</body></html>
+
