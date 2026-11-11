@@ -188,6 +188,12 @@ h3{font-size:clamp(16px,2vw,26px);font-weight:700;line-height:1.3;}
   85%{transform:translateX(-1px);filter:blur(0);}
 }
 .hint-shake{animation:hint-shake .6s ease;}
+@keyframes hint-slider-glow{
+  0%,100%{filter:drop-shadow(0 0 0px rgba(79,142,247,0));}
+  40%{filter:drop-shadow(0 0 7px rgba(79,142,247,.9));}
+  60%{filter:drop-shadow(0 0 7px rgba(79,142,247,.9));}
+}
+input[type=range].hint-pulse{animation:hint-slider-glow 1.1s ease;}
 
 /* ---- RESP ---- */
 @media(max-width:700px){
@@ -1394,15 +1400,17 @@ function hintSliders(slide) {
   if (inp) {
     var orig = +inp.value;
     var stp = +(inp.step) || 1;
-    var nudge = Math.min(orig + stp * 4, +inp.max);
+    var nudge = Math.min(orig + stp * 7, +inp.max);
+    inp.classList.add('hint-pulse');
+    inp.addEventListener('animationend', function(){ inp.classList.remove('hint-pulse'); }, {once:true});
     setTimeout(function() {
       inp.value = nudge;
       inp.dispatchEvent(new Event('input'));
       setTimeout(function() {
         inp.value = orig;
         inp.dispatchEvent(new Event('input'));
-      }, 480);
-    }, 380);
+      }, 650);
+    }, 350);
   }
   var items = slide.querySelectorAll('.ns-item');
   if (items.length) {
