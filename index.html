@@ -1368,9 +1368,26 @@ function goTo(n) {
   prog.style.width = `${((cur + 1) / total) * 100}%`;
   document.getElementById('btn-prev').disabled = cur === 0;
   document.getElementById('btn-next').disabled = cur === total - 1;
+  hintSliders(slides[cur]);
 }
 
 function go(dir) { goTo(Math.max(0, Math.min(total - 1, cur + dir))); }
+
+function hintSliders(slide) {
+  var inp = slide.querySelector('input[type=range]');
+  if (!inp) return;
+  var orig = +inp.value;
+  var stp = +(inp.step) || 1;
+  var nudge = Math.min(orig + stp * 4, +inp.max);
+  setTimeout(function() {
+    inp.value = nudge;
+    inp.dispatchEvent(new Event('input'));
+    setTimeout(function() {
+      inp.value = orig;
+      inp.dispatchEvent(new Event('input'));
+    }, 480);
+  }, 380);
+}
 
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(1); }
